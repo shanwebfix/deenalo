@@ -1,0 +1,76 @@
+name: Android Build & Firebase Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build_android_and_deploy:
+    runs-on: ubuntu-latest
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4️⃣ Build web assets
+      - name: Build web assets
+        run: npm run build
+
+      # 5️⃣ Capacitor sync Android
+      - name: Ensure Capacitor Android platform
+        run: |
+          npm install @capacitor/android
+          npx cap sync android
+
+      # 6️⃣ Setup Java JDK for Gradle
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      # 7️⃣ Build Android APK
+      - name: Build APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      # 8️⃣ Upload APK artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: deenalo-release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+      # 9️⃣ Deploy to Firebase Hosting (on main branch push)
+      - name: Deploy to Firebase Hosting (Live Channel)
+        if: github.ref == 'refs/heads/main'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEENALO }}
+          channelId: live
+          projectId: deenalo
+
+      # 🔟 Deploy to Firebase Hosting preview (on PR)
+      - name: Deploy to Firebase Hosting (Preview)
+        if: github.event_name == 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEENALO }}
+          projectId: deenalo

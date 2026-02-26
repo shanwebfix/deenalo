@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">DeenAlo</string>
+    <string name="title_activity_main">DeenAlo</string>
+    <string name="package_name">com.shan.deenalo</string>
+    <string name="custom_url_scheme">com.shan.deenalo</string>
+</resources>
