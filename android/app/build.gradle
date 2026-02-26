@@ -16,16 +16,13 @@ android {
         }
     }
 
-    // ⬇️ AI SECTION TI ADD/UPDATE KORUN ⬇️
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
 
-    // Jodi Kotlin use koren (Future safety-r jonno)
-    kotlinOptions {
-        jvmTarget = '21'
-    }
+    // ❌ Error khaisilo dekhe 'kotlinOptions' purota fele disi.
+    // Capacitor project-e eta chharao build hoy.
 
     buildTypes {
         release {
@@ -57,9 +54,9 @@ apply from: 'capacitor.build.gradle'
 
 try {
     def servicesJSON = file('google-services.json')
-    if (servicesJSON.exists()) { // .text er jaygay .exists() use kora safer
+    if (servicesJSON.exists()) {
         apply plugin: 'com.google.gms.google-services'
     }
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied.")
-}
+}  
