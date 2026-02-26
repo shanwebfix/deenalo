@@ -9,7 +9,6 @@ on:
 jobs:
   build_android_and_deploy:
     runs-on: ubuntu-latest
-    # Purono JAVA_HOME env ta ekhon dorkar nei, setup-java action automatically eta handle korbe
 
     steps:
       # 1️⃣ Checkout repo
@@ -18,9 +17,9 @@ jobs:
 
       # 2️⃣ Setup Node
       - name: Setup Node
-        uses: actions/setup-node@v4 # v3 theke v4 e update kora bhalo
+        uses: actions/setup-node@v4
         with:
-          node-version: '22' # Node 24 ekhon-o khub e notun, LTS version '20' stable
+          node-version: '22'
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
@@ -38,10 +37,10 @@ jobs:
 
       # 6️⃣ Setup Java JDK for Gradle (Update to 21)
       - name: Setup Java JDK
-        uses: actions/setup-java@v4 # v3 theke v4 e update kora bhalo
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21' # Ekhane 17 bad diye 21 kora hoyeche
+          java-version: '21'
 
       # 7️⃣ Make Gradle executable
       - name: Make Gradle executable
@@ -52,12 +51,13 @@ jobs:
         working-directory: android
         run: ./gradlew assembleRelease
 
-      # 9️⃣ Upload APK artifact
+      # 9️⃣ Upload APK artifact (Updated Path)
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          # Ekhon se release folder-er bhitore thaka jekono .apk file niye nibe
+          path: android/app/build/outputs/apk/release/*.apk
 
       # 🔟 Deploy to Firebase Hosting (on main branch push)
       - name: Deploy to Firebase Hosting (Live Channel)
