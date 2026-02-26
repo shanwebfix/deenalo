@@ -2,6 +2,9 @@ ext {
     minSdkVersion = 24
     compileSdkVersion = 36
     targetSdkVersion = 36
+    // Java version explicit-ly ekhane define kore deya bhalo
+    javaVersion = JavaVersion.VERSION_21 
+
     androidxActivityVersion = '1.11.0'
     androidxAppCompatVersion = '1.7.1'
     androidxCoordinatorLayoutVersion = '1.3.0'

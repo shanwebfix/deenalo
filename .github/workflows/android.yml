@@ -9,8 +9,7 @@ on:
 jobs:
   build_android_and_deploy:
     runs-on: ubuntu-latest
-    env:
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk
+    # Purono JAVA_HOME env ta ekhon dorkar nei, setup-java action automatically eta handle korbe
 
     steps:
       # 1️⃣ Checkout repo
@@ -19,9 +18,9 @@ jobs:
 
       # 2️⃣ Setup Node
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # v3 theke v4 e update kora bhalo
         with:
-          node-version: '24'
+          node-version: '20' # Node 24 ekhon-o khub e notun, LTS version '20' stable
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
@@ -37,14 +36,14 @@ jobs:
           npm install @capacitor/android
           npx cap sync android
 
-    # 6️⃣ Setup Java JDK for Gradle
+      # 6️⃣ Setup Java JDK for Gradle (Update to 21)
       - name: Setup Java JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4 # v3 theke v4 e update kora bhalo
         with:
-         distribution: 'temurin'
-         java-version: '17'
+          distribution: 'temurin'
+          java-version: '21' # Ekhane 17 bad diye 21 kora hoyeche
 
-      # 7️⃣ Make Gradle executable (fix permission denied)
+      # 7️⃣ Make Gradle executable
       - name: Make Gradle executable
         run: chmod +x android/gradlew
 
