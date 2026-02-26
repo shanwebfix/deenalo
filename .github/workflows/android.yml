@@ -37,12 +37,12 @@ jobs:
           npm install @capacitor/android
           npx cap sync android
 
-      # 6️⃣ Setup Java JDK for Gradle
+    # 6️⃣ Setup Java JDK for Gradle
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '11'
+         distribution: 'temurin'
+         java-version: '17'
 
       # 7️⃣ Make Gradle executable (fix permission denied)
       - name: Make Gradle executable
