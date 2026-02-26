@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4 # v3 theke v4 e update kora bhalo
         with:
-          node-version: '20' # Node 24 ekhon-o khub e notun, LTS version '20' stable
+          node-version: '22' # Node 24 ekhon-o khub e notun, LTS version '20' stable
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
