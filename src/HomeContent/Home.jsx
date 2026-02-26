@@ -1,0 +1,14 @@
+// Home.jsx
+import TodayHadith from "./Hadith"; 
+import NamajTime from "./NamajTime"; 
+
+export default function Home() {
+  return (
+    <div className="space-y-12">
+
+      {/* এখানে NamajTime কম্পোনেন্ট দেখানো হবে */}
+      <TodayHadith />
+      <NamajTime />
+    </div>
+  );
+}
