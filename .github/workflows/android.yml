@@ -44,19 +44,23 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      # 7️⃣ Build Android APK
+      # 7️⃣ Make Gradle executable (fix permission denied)
+      - name: Make Gradle executable
+        run: chmod +x android/gradlew
+
+      # 8️⃣ Build Android APK
       - name: Build APK
         working-directory: android
         run: ./gradlew assembleRelease
 
-      # 8️⃣ Upload APK artifact
+      # 9️⃣ Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: android/app/build/outputs/apk/release/app-release.apk
 
-      # 9️⃣ Deploy to Firebase Hosting (on main branch push)
+      # 🔟 Deploy to Firebase Hosting (on main branch push)
       - name: Deploy to Firebase Hosting (Live Channel)
         if: github.ref == 'refs/heads/main'
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -66,7 +70,7 @@ jobs:
           channelId: live
           projectId: deenalo
 
-      # 🔟 Deploy to Firebase Hosting preview (on PR)
+      # 1️⃣1️⃣ Deploy to Firebase Hosting preview (on PR)
       - name: Deploy to Firebase Hosting (Preview)
         if: github.event_name == 'pull_request'
         uses: FirebaseExtended/action-hosting-deploy@v0
