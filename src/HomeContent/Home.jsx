@@ -8,8 +8,9 @@ export default function Home() {
     <div className="space-y-12">
 
       {/* এখানে NamajTime কম্পোনেন্ট দেখানো হবে */}
-      <TodayHadith />
+      
       <NamajTime />
+      <TodayHadith />
       <Kibla />
     </div>
   );
