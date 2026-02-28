@@ -35,7 +35,7 @@ jobs:
           npm install @capacitor/android
           npx cap sync android
 
-      # 6️⃣ Setup Java JDK for Gradle (Update to 21)
+      # 6️⃣ Setup Java JDK for Gradle
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -46,18 +46,17 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x android/gradlew
 
-      # 8️⃣ Build Android APK
+      # 8️⃣ Build Android APK (Debug Mode - Installable)
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleDebug
 
-      # 9️⃣ Upload APK artifact (Updated Path)
+      # 9️⃣ Upload APK artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apk
-          # Ekhon se release folder-er bhitore thaka jekono .apk file niye nibe
-          path: android/app/build/outputs/apk/release/*.apk
+          name: app-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
 
       # 🔟 Deploy to Firebase Hosting (on main branch push)
       - name: Deploy to Firebase Hosting (Live Channel)

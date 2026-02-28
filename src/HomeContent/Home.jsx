@@ -1,6 +1,7 @@
 // Home.jsx
 import TodayHadith from "./Hadith"; 
 import NamajTime from "./NamajTime"; 
+import Kibla from "./Kibla"; 
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       {/* এখানে NamajTime কম্পোনেন্ট দেখানো হবে */}
       <TodayHadith />
       <NamajTime />
+      <Kibla />
     </div>
   );
 }
