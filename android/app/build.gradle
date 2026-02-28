@@ -2,13 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "com.shan.deenalo"
-    // সরাসরি ভার্সন বসিয়ে দেওয়া হলো ঝামেলা এড়াতে
-    compileSdk 35 
+    compileSdk 36 
 
     defaultConfig {
         applicationId "com.shan.deenalo"
         minSdkVersion 24
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,10 +39,12 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
-    // ভেরিয়েবলের বদলে সরাসরি লেটেস্ট ভার্সন দেওয়া হলো
+    // ডুপ্লিকেট রিমুভ করে ক্লিন ভার্সন
     implementation "androidx.appcompat:appcompat:1.7.0"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
     implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "androidx.core:core:1.13.1" 
+    implementation "androidx.activity:activity:1.9.3" 
     
     implementation project(':capacitor-android')
     
@@ -54,10 +55,8 @@ dependencies {
     implementation project(':capacitor-cordova-android-plugins')
 }
 
-// Capacitor এর ইন্টারনাল বিল্ড সেটিংস
 apply from: 'capacitor.build.gradle'
 
-// Google Services চেক
 try {
     def servicesJSON = file('google-services.json')
     if (servicesJSON.exists()) {
