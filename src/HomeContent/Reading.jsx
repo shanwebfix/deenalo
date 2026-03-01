@@ -53,6 +53,38 @@ export default function QuranLinks() {
       darkBg: "dark:bg-amber-950/30",
       darkBorder: "dark:border-amber-800",
       features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
+    },
+        {
+      id: 'daily-tasbih',
+      to: "/pages/R/daily-tasbih",
+      icon: ScrollText,
+      icon2: BookText,
+      title: "প্রতিদিনের তাসবিহ্ ও জিকির",
+      description: "আরবি এবং সহজ বাংলা অনুবাদ",
+      gradient: "from-amber-600 to-amber-500",
+      lightBg: "bg-amber-50",
+      lightBorder: "border-amber-200",
+      textColor: "text-amber-600",
+      darkText: "dark:text-amber-400",
+      darkBg: "dark:bg-amber-950/30",
+      darkBorder: "dark:border-amber-800",
+      features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
+    },
+        {
+      id: 'sokal-sondha',
+      to: "/sokal-sondha",
+      icon: ScrollText,
+      icon2: BookText,
+      title: "সকাল সন্ধ্যা তাসবিহ্ ও জিকির",
+      description: "আরবি এবং সহজ বাংলা অনুবাদ",
+      gradient: "from-amber-600 to-amber-500",
+      lightBg: "bg-amber-50",
+      lightBorder: "border-amber-200",
+      textColor: "text-amber-600",
+      darkText: "dark:text-amber-400",
+      darkBg: "dark:bg-amber-950/30",
+      darkBorder: "dark:border-amber-800",
+      features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
     }
   ];
 

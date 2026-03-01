@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Compass, MapPin, Navigation, AlertCircle, RefreshCw, Info } from 'lucide-react';
+import { Geolocation } from '@capacitor/geolocation'; // Capacitor Geolocation ইমপোর্ট
 
 export default function QiblaCompass() {
   const [location, setLocation] = useState(null);
@@ -14,42 +15,41 @@ export default function QiblaCompass() {
   const MAKKAH_LAT = 21.4225;
   const MAKKAH_LNG = 39.8262;
 
-  // ইউজারের লোকেশন নেওয়া
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-          setLocation({ lat: userLat, lng: userLng });
-          
-          // কিবলা দিক নির্ণয়
-          const direction = calculateQiblaDirection(userLat, userLng);
-          setQiblaDirection(direction);
-          setLoading(false);
-        },
-        (error) => {
-          console.error('Location error:', error);
-          if (error.code === 1) {
-            setPermissionDenied(true);
-          } else {
-            setError('লোকেশন পাওয়া যায়নি');
-          }
-          setLoading(false);
-        }
-      );
-    } else {
-      setError('আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না');
+  // লোকেশন নেওয়ার ক্যাপাসিটর লজিক
+  const fetchLocation = async () => {
+    try {
+      setLoading(true);
+      const position = await Geolocation.getCurrentPosition();
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      
+      setLocation({ lat: userLat, lng: userLng });
+      const direction = calculateQiblaDirection(userLat, userLng);
+      setQiblaDirection(direction);
+      setLoading(false);
+    } catch (err) {
+      console.error('Location error:', err);
+      // পারমিশন ডিনাইড হলে চেক করা
+      if (err.message && err.message.toLowerCase().includes('denied')) {
+        setPermissionDenied(true);
+      } else {
+        setError('লোকেশন পাওয়া যায়নি। জিপিএস অন আছে কিনা চেক করুন।');
+      }
       setLoading(false);
     }
+  };
 
-    // ডিভাইসের ориенташн ট্র্যাক করা
+  useEffect(() => {
+    // অ্যাপ লোড হলে লোকেশন কল হবে
+    fetchLocation();
+
+    // ডিভাইসের অরিয়েন্টেশন ট্র্যাক করা
     const handleOrientation = (event) => {
       if (event.webkitCompassHeading) {
         // iOS
         setUserDirection(event.webkitCompassHeading);
-      } else if (event.alpha) {
-        // Android
+      } else if (event.alpha !== null) {
+        // Android (Absolute orientation)
         setUserDirection(360 - event.alpha);
       }
     };
@@ -79,18 +79,12 @@ export default function QiblaCompass() {
     return qibla;
   };
 
-  const toRadians = (degrees) => {
-    return degrees * (Math.PI / 180);
-  };
-
-  const toDegrees = (radians) => {
-    return radians * (180 / Math.PI);
-  };
+  const toRadians = (degrees) => degrees * (Math.PI / 180);
+  const toDegrees = (radians) => radians * (180 / Math.PI);
 
   // কম্পাসের ঘূর্ণন ক্যালকুলেশন
   const getCompassRotation = () => {
     if (userDirection && qiblaDirection) {
-      // ইউজারের দিক থেকে কিবলার দিক নির্ণয়
       return (qiblaDirection - userDirection + 360) % 360;
     }
     return qiblaDirection;
@@ -98,31 +92,9 @@ export default function QiblaCompass() {
 
   // রিফ্রেশ ফাংশন
   const refreshLocation = () => {
-    setLoading(true);
     setError(null);
     setPermissionDenied(false);
-    
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-          setLocation({ lat: userLat, lng: userLng });
-          
-          const direction = calculateQiblaDirection(userLat, userLng);
-          setQiblaDirection(direction);
-          setLoading(false);
-        },
-        (error) => {
-          if (error.code === 1) {
-            setPermissionDenied(true);
-          } else {
-            setError('লোকেশন পাওয়া যায়নি');
-          }
-          setLoading(false);
-        }
-      );
-    }
+    fetchLocation();
   };
 
   // ডিগ্রি থেকে দিকের নাম
@@ -155,7 +127,7 @@ export default function QiblaCompass() {
           </div>
           <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">লোকেশন অনুমতি প্রয়োজন</h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            কিবলা দিক নির্ণয়ের জন্য আপনার লোকেশন প্রয়োজন। অনুগ্রহ করে ব্রাউজার সেটিংস থেকে লোকেশন অনুমতি দিন।
+            কিবলা দিক নির্ণয়ের জন্য আপনার লোকেশন প্রয়োজন। অনুগ্রহ করে অ্যাপ সেটিংস থেকে লোকেশন অনুমতি দিন।
           </p>
           <button
             onClick={refreshLocation}
@@ -224,20 +196,15 @@ export default function QiblaCompass() {
 
       {/* কম্পাস */}
       <div className="relative flex justify-center mb-8">
-        {/* কম্পাস রিং */}
         <div className="relative w-64 h-64 md:w-72 md:h-72">
-          {/* বাইরের রিং */}
           <div className="absolute inset-0 rounded-full border-8 border-gray-100 dark:border-gray-800 shadow-inner"></div>
           
-          {/* ডিগ্রি মার্কিং */}
           <div className="absolute inset-0">
             {[...Array(360)].map((_, i) => {
               if (i % 30 === 0) {
                 const angle = (i * Math.PI) / 180;
                 const x1 = 50 + 45 * Math.sin(angle);
                 const y1 = 50 - 45 * Math.cos(angle);
-                const x2 = 50 + 40 * Math.sin(angle);
-                const y2 = 50 - 40 * Math.cos(angle);
                 return (
                   <div
                     key={i}
@@ -258,7 +225,6 @@ export default function QiblaCompass() {
             })}
           </div>
 
-          {/* মূল দিক নির্দেশক (N, E, S, W) */}
           <div className="absolute inset-0">
             <div className="absolute top-2 left-1/2 -translate-x-1/2 text-sm font-bold text-emerald-600">N</div>
             <div className="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-emerald-600">E</div>
@@ -266,12 +232,10 @@ export default function QiblaCompass() {
             <div className="absolute left-2 top-1/2 -translate-y-1/2 text-sm font-bold text-emerald-600">W</div>
           </div>
 
-          {/* কম্পাস সুই */}
           <div 
             className="absolute inset-0 transition-transform duration-300 ease-out"
             style={{ transform: `rotate(${getCompassRotation()}deg)` }}
           >
-            {/* উত্তর সুই (লাল) */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <div className="relative">
                 <div className="w-1 h-24 bg-gradient-to-t from-red-500 to-red-600 rounded-full origin-bottom transform -translate-y-12"></div>
@@ -279,18 +243,15 @@ export default function QiblaCompass() {
               </div>
             </div>
             
-            {/* দক্ষিণ সুই (কালো) */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <div className="relative">
                 <div className="w-1 h-24 bg-gradient-to-b from-gray-700 to-gray-900 rounded-full origin-top transform translate-y-12"></div>
               </div>
             </div>
 
-            {/* সেন্টার পয়েন্ট */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900 z-10"></div>
           </div>
 
-          {/* কাবা আইকন */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="relative">
               <div 
@@ -340,9 +301,7 @@ export default function QiblaCompass() {
         <div className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-950/30 dark:to-blue-950/30 rounded-2xl p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <MapPin size={18} className="text-emerald-600 dark:text-emerald-400" />
-            <span className="text-sm text-gray-700 dark:text-gray-300">
-              আপনার অবস্থান
-            </span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">আপনার অবস্থান</span>
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             অক্ষাংশ: {location.lat.toFixed(4)}°, দ্রাঘিমা: {location.lng.toFixed(4)}°
@@ -366,13 +325,8 @@ export default function QiblaCompass() {
         <button
           onClick={() => {
             if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
-              // iOS এর জন্য বিশেষ অনুমতি
               DeviceOrientationEvent.requestPermission()
-                .then(permissionState => {
-                  if (permissionState === 'granted') {
-                    window.addEventListener('deviceorientation', () => {});
-                  }
-                })
+                .then(state => { if (state === 'granted') window.location.reload(); })
                 .catch(console.error);
             }
           }}
@@ -382,7 +336,6 @@ export default function QiblaCompass() {
         </button>
       </div>
 
-      {/* নোট */}
       <p className="text-xs text-center text-gray-400 dark:text-gray-600 mt-4">
         * সঠিক ফলাফলের জন্য ডিভাইসটি সমতল পৃষ্ঠে রাখুন
       </p>
@@ -390,15 +343,13 @@ export default function QiblaCompass() {
   );
 }
 
-// দূরত্ব নির্ণয়ের ফাংশন (Haversine formula)
+// দূরত্ব নির্ণয় (Haversine formula)
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // পৃথিবীর ব্যাসার্ধ (কিমি)
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return Math.round(R * c);
 }

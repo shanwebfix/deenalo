@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 body {
-  @apply bg-white dark:bg-gray-900 transition-colors duration-300;
+   @apply bg-white dark:bg-gray-900 transition-colors duration-300;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Sudhu input, textarea ebong allow-copy class e selection on korun */
+input, 
+textarea, 
+.allow-copy {
+  -webkit-user-select: text !important;
+  user-select: text !important;
 }
