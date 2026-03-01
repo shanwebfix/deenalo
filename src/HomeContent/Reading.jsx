@@ -1,92 +1,92 @@
-import { BookOpen, Languages, ArrowRight, Headphones, BookText, ScrollText } from "lucide-react";
+import { BookOpen, Languages, ArrowRight, Headphones, BookText, ScrollText, CircleDot, Sparkles, SunMoon, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function QuranLinks() {
   const [hoveredCard, setHoveredCard] = useState(null);
 
-  const cards = [
-    {
-      id: 'quran-ar',
-      to: "/quran-ar",
-      icon: BookOpen,
-      icon2: Headphones,
-      title: "আরবি কুরআন",
-      description: "শুধুমাত্র মূল আরবি আয়াত ও তিলাওয়াত",
-      gradient: "from-emerald-600 to-emerald-500",
-      lightBg: "bg-emerald-50",
-      lightBorder: "border-emerald-200",
-      textColor: "text-emerald-600",
-      darkText: "dark:text-emerald-400",
-      darkBg: "dark:bg-emerald-950/30",
-      darkBorder: "dark:border-emerald-800",
-      features: ["মিশারি রশিদ", "আব্দুল বাসিত", "সাদ আল-ঘামিদি"]
-    },
-    {
-      id: 'quran-bn',
-      to: "/quran-bn",
-      icon: Languages,
-      icon2: BookText,
-      title: "বাংলা অর্থসহ কুরআন",
-      description: "আরবি এবং সহজ বাংলা অনুবাদ",
-      gradient: "from-sky-600 to-sky-500",
-      lightBg: "bg-sky-50",
-      lightBorder: "border-sky-200",
-      textColor: "text-sky-600",
-      darkText: "dark:text-sky-400",
-      darkBg: "dark:bg-sky-950/30",
-      darkBorder: "dark:border-sky-800",
-      features: ["শায়খুল হাদীস", "ড. মুজিবুর রহমান", "তাফসীর"]
-    },
-    {
-      id: 'bukhari',
-      to: "/bukhari",
-      icon: ScrollText,
-      icon2: BookText,
-      title: "বাংলা অর্থসহ বুখারী",
-      description: "আরবি এবং সহজ বাংলা অনুবাদ",
-      gradient: "from-amber-600 to-amber-500",
-      lightBg: "bg-amber-50",
-      lightBorder: "border-amber-200",
-      textColor: "text-amber-600",
-      darkText: "dark:text-amber-400",
-      darkBg: "dark:bg-amber-950/30",
-      darkBorder: "dark:border-amber-800",
-      features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
-    },
-        {
-      id: 'daily-tasbih',
-      to: "/pages/R/daily-tasbih",
-      icon: ScrollText,
-      icon2: BookText,
-      title: "প্রতিদিনের তাসবিহ্ ও জিকির",
-      description: "আরবি এবং সহজ বাংলা অনুবাদ",
-      gradient: "from-amber-600 to-amber-500",
-      lightBg: "bg-amber-50",
-      lightBorder: "border-amber-200",
-      textColor: "text-amber-600",
-      darkText: "dark:text-amber-400",
-      darkBg: "dark:bg-amber-950/30",
-      darkBorder: "dark:border-amber-800",
-      features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
-    },
-        {
-      id: 'sokal-sondha',
-      to: "/sokal-sondha",
-      icon: ScrollText,
-      icon2: BookText,
-      title: "সকাল সন্ধ্যা তাসবিহ্ ও জিকির",
-      description: "আরবি এবং সহজ বাংলা অনুবাদ",
-      gradient: "from-amber-600 to-amber-500",
-      lightBg: "bg-amber-50",
-      lightBorder: "border-amber-200",
-      textColor: "text-amber-600",
-      darkText: "dark:text-amber-400",
-      darkBg: "dark:bg-amber-950/30",
-      darkBorder: "dark:border-amber-800",
-      features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
-    }
-  ];
+ const cards = [
+  {
+    id: 'quran-ar',
+    to: "/quran-ar",
+    icon: BookOpen,
+    icon2: Headphones,
+    title: "আরবি কুরআন",
+    description: "শুধুমাত্র মূল আরবি আয়াত ও তিলাওয়াত",
+    gradient: "from-emerald-600 to-emerald-500",
+    lightBg: "bg-emerald-50",
+    lightBorder: "border-emerald-200",
+    textColor: "text-emerald-600",
+    darkText: "dark:text-emerald-400",
+    darkBg: "dark:bg-emerald-950/30",
+    darkBorder: "dark:border-emerald-800",
+    features: ["মিশারি রশিদ", "আব্দুল বাসিত", "সাদ আল-ঘামিদি"]
+  },
+  {
+    id: 'quran-bn',
+    to: "/quran-bn",
+    icon: Languages,
+    icon2: BookText,
+    title: "বাংলা অর্থসহ কুরআন",
+    description: "আরবি এবং সহজ বাংলা অনুবাদ",
+    gradient: "from-sky-600 to-sky-500",
+    lightBg: "bg-sky-50",
+    lightBorder: "border-sky-200",
+    textColor: "text-sky-600",
+    darkText: "dark:text-sky-400",
+    darkBg: "dark:bg-sky-950/30",
+    darkBorder: "dark:border-sky-800",
+    features: ["শায়খুল হাদীস", "ড. মুজিবুর রহমান", "তাফসীর"]
+  },
+  {
+    id: 'bukhari',
+    to: "/bukhari",
+    icon: ScrollText,
+    icon2: BookText,
+    title: "বাংলা অর্থসহ বুখারী",
+    description: "আরবি এবং সহজ বাংলা অনুবাদ",
+    gradient: "from-amber-600 to-amber-500",
+    lightBg: "bg-amber-50",
+    lightBorder: "border-amber-200",
+    textColor: "text-amber-600",
+    darkText: "dark:text-amber-400",
+    darkBg: "dark:bg-amber-950/30",
+    darkBorder: "dark:border-amber-800",
+    features: ["সহীহ হাদীস", "ইমাম বুখারী (রহ)", "৭০+ কিতাব"]
+  },
+  {
+    id: 'daily-tasbih',
+    to: "/pages/R/daily-tasbih",
+    icon: CircleDot, // অথবা Dices
+    icon2: Sparkles,
+    title: "প্রতিদিনের তাসবিহ্ ও জিকির",
+    description: "প্রয়োজনীয় দোয়া ও ডিজিটাল তাসবিহ গণনার সুবিধা",
+    gradient: "from-rose-600 to-rose-500",
+    lightBg: "bg-rose-50",
+    lightBorder: "border-rose-200",
+    textColor: "text-rose-600",
+    darkText: "dark:text-rose-400",
+    darkBg: "dark:bg-rose-950/30",
+    darkBorder: "dark:border-rose-800",
+    features: ["ডিজিটাল কাউন্টার", "প্রয়োজনীয় দোয়া", "গুরুত্ব ও ফজিলত"]
+  },
+  {
+    id: 'sokal-sondha',
+    to: "/sokal-sondha",
+    icon: SunMoon,
+    icon2: Clock,
+    title: "সকাল সন্ধ্যা তাসবিহ্ ও জিকির",
+    description: "সুন্নাহ সম্মত সকাল ও সন্ধ্যার মাসনুন আমলসমূহ",
+    gradient: "from-indigo-600 to-indigo-500",
+    lightBg: "bg-indigo-50",
+    lightBorder: "border-indigo-200",
+    textColor: "text-indigo-600",
+    darkText: "dark:text-indigo-400",
+    darkBg: "dark:bg-indigo-950/30",
+    darkBorder: "dark:border-indigo-800",
+    features: ["সকালের জিকির", "সন্ধ্যার জিকির", "অডিও ও অর্থসহ"]
+  }
+];
 
   return (
     <div className="w-full max-w-7xl mx-auto">
